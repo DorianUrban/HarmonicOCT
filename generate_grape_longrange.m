@@ -4,22 +4,20 @@ folder = folders.folder;
 folders = folders(3:end);
 names = {folders(:).name};
 
-% Get background - usually last file in folder
+% Get background - last file in folder
 directory = strcat(folder, "\",  cell2mat(names(end)));
 f = Frame(directory);
 
-f = f.select_roi();
-pos = f.roi;
+% f = f.select_roi();
+% pos = f.roi;
+
+pos = [108 102 624 138];
 noise = f.noise;
 
 names = names(1:end-1);
 
 results = {};
 N = 10;
-
-% figure
-% tiledlayout("flow")
-
 
 for ii = 1:length(names)
     snrs = zeros(1, N);
@@ -167,7 +165,6 @@ for jj = [6, 7]
 end
 
 
-% %% Plot SNR as a function of shift distance.
 
 
 

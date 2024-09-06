@@ -29,7 +29,7 @@ while true
         f_mean = abs(f_n.bscan_real).^2;
     else
         [reg, count] = register_bscans(f_n.bscan_real, f_mean);
-        if count > 80
+        if count > 85
             f_mean = f_mean + abs(reg).^2;
             n = n + 1;
         end
@@ -39,7 +39,7 @@ while true
         break
     end
     
-    i = i + 1
+    i = i + 1;
     
 
 

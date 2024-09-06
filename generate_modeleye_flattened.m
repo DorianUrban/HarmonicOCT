@@ -5,8 +5,8 @@
 % 
 % %%
 
-directories = ["\\skat\Research Team\DUrban\MatLab\Process B-Scans\SilverstoneFlattening\20240201-153117-00",
-    "\\skat\Research Team\DUrban\MatLab\Process B-Scans\SilverstoneFlattening\20240201-155859-00"];
+directories = [strcat(pwd, "\data\Silverstone\20240201-153117-00"),
+    strcat(pwd, "\data\Silverstone\20240201-155859-00")];
 
 clear results
 
@@ -38,21 +38,21 @@ for jj = 1:length(directories)
     results(jj) = f_mean;
 
 end
-%
-
-figure
-imshow(logScaling(f_mean.bscan_real), Colormap=turbo);
-title(sprintf("Incoherent Average N = %i", N*M))
-daspect([1, f_mean.siz(1)/f_mean.siz(2), 1])
-
 %%
+
+% figure
+% imshow(logScaling(f_mean.bscan_real), Colormap=turbo);
+% title(sprintf("Incoherent Average N = %i", N*M))
+% daspect([1, f_mean.siz(1)/f_mean.siz(2), 1])
+
+%
 
 curved = circshift((results(1).bscan_real), -1500, 2);
 flat = circshift(flipud(results(2).bscan_real), 150, 2);
 
-px_per_mm_x = 4000/(140/360*25*pi*2) * 1.1667/1e3; % BscanLen / 70deg Section * OSTestRatio / mm
-px_per_mm_y = 640/4/1e3; % AscanLen / AscanRange / mm
-aspect_ratio = px_per_mm_x / px_per_mm_y * 2;
+px_per_mm_x = 2000/(70/360*24*pi) * 1.1667; % BscanLen / 70deg Section * OSTestRatio
+px_per_mm_y = 640/4; % AscanLen / AscanRange
+aspect_ratio = px_per_mm_x / px_per_mm_y;
 
 figure
 tiledlayout("vertical", "TileSpacing", "None", "Padding", "tight")
@@ -64,10 +64,31 @@ daspect([1, 1/aspect_ratio 1])
 text(ax, 10, 60, "a", "FontSize", 18, "Color", [0.99 0.99 0.99])
 
 ax = nexttile;
-imshow(logScaling(flat(:, 1:end/2), curved(:, 1:end/2)), DisplayRange=[min(scaled(:)), max(scaled(:))]);
+flat_log = logScaling(flat(:, 1:end/2), curved(:, 1:end/2));
+imshow(flat_log, DisplayRange=[min(scaled(:)), max(scaled(:))]);
 colormap turbo
 daspect([1, 1/aspect_ratio 1])
 text(ax, 10, 60, "b", "FontSize", 18, "Color", [0.99 0.99 0.99])
+
+ax = nexttile;
+
+flat_p = padarray(flat_log, [500, 0], 0);
+img = zeros(size(flat_p));
+
+flat_p = imtranslate(flat_p, [0, -190]);
+
+for ii = 1:size(flat_p, 2)
+    img(:, ii) =  imtranslate(flat_p(:, ii), [0, (ii-floor(size(img, 2)/2))^2 * -0.00034]);
+
+end
+
+img = circshift(img, 00, 1);
+% figure
+imshow(img(1:end-1000, :), [])
+colormap turbo
+daspect([1, 1/aspect_ratio 1])
+text(ax, 10, 60, "c", "FontSize", 18, "Color", [0.99 0.99 0.99])
+
 
 c = colorbar;
 c.Label.String = "";
@@ -75,15 +96,14 @@ c.Limits = [0, 1];
 c.Layout.Tile = "east";
 c.Ticks = [0 1];
 
-
-bar_length = 1000;
+bar_length = 1;
 
 hbar = scalebar(ax, "y");
 hbar.Visible = "off";
 hbar.Axis = "y";
 hbar.Color = [0.99 1 1];
 hbar.ScalebarLength = bar_length;
-hbar.ConversionFactor = 640/4/1e3; % AscanLen / AscanRange / mm
+hbar.ConversionFactor = 640/4; % AscanLen / AscanRange
 hbar.UnitLabel = char("");
 
 hbar2 = scalebar(ax, "x");
@@ -91,5 +111,25 @@ hbar2.Visible = "off";
 hbar2.Axis = "x";
 hbar2.Color = [0.99 1 1];
 hbar2.ScalebarLength = bar_length;
-hbar2.ConversionFactor = 4000/(140/360*25*pi*2)/1e3; % BscanLen / 70deg Sector
+hbar2.ConversionFactor = 2000/(70/360*24*pi) * 1.1667; % BscanLen / 70deg Section
 hbar2.UnitLabel = char("");
+
+%%
+
+flat_p = padarray(logScaling(flat(:, 1:end/2)), [500, 0], 0);
+img = zeros(size(flat_p));
+
+flat_p = imtranslate(flat_p, [0, -185]);
+
+for ii = 1:size(flat_p, 2)
+    img(:, ii) =  imtranslate(flat_p(:, ii), [0, (ii-floor(size(img, 2)/2))^2 * -0.00034]);
+
+end
+
+
+% imshowpair(img, logScaling(curved(:, 1:end/2)), "falsecolor")
+
+img = circshift(img, -80, 1);
+% figure
+imshow(img(500:end-500, :), [])
+

@@ -1,6 +1,6 @@
 close all
 
-directory = "\\skat\research team\DUrban\MatLab\Process B-Scans\Flattening Grape\20240408-164353-00";
+directory = strcat(pwd, "\data\Grape\20240408-164353-00");
 
 % f = Frame(directory, 3);
 % f = f.disp_comp();
@@ -26,9 +26,9 @@ img_sharp = logScaling(f_sharp(end/2:end, end/2:end));
 img_blurred = logScaling(f_blurred(end/2:end, 1:end/2), f_sharp(end/2:end, end/2:end));
 
 x_extent = 400:1700;
-px_per_mm_x = 4000/12/1e3; % BscanLen / Imaging Range / mm
+px_per_mm_x = 2000/12/1e3; % BscanLen / Imaging Range / mm
 px_per_mm_y = 640/4/1e3; % AscanLen / AscanRange / mm
-aspect_ratio = px_per_mm_x / px_per_mm_y;
+aspect_ratio = px_per_mm_x / px_per_mm_y * 2;
 
 z_max = 2;
 k_min = 2 * pi / 1110e-9;
@@ -106,6 +106,6 @@ hbar2.Visible = "off";
 hbar2.Axis = "x";
 hbar2.Color = [0.99 1 1];
 hbar2.ScalebarLength = bar_length;
-hbar2.ConversionFactor = 4000/12/1e3; % BscanLen / Bscan Range / mm
+hbar2.ConversionFactor = 2000/12/1e3; % BscanLen / Bscan Range / mm
 hbar2.UnitLabel = char("");
 
