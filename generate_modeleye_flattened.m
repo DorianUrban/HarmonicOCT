@@ -114,22 +114,3 @@ hbar2.ScalebarLength = bar_length;
 hbar2.ConversionFactor = 2000/(70/360*24*pi) * 1.1667; % BscanLen / 70deg Section
 hbar2.UnitLabel = char("");
 
-%%
-
-flat_p = padarray(logScaling(flat(:, 1:end/2)), [500, 0], 0);
-img = zeros(size(flat_p));
-
-flat_p = imtranslate(flat_p, [0, -185]);
-
-for ii = 1:size(flat_p, 2)
-    img(:, ii) =  imtranslate(flat_p(:, ii), [0, (ii-floor(size(img, 2)/2))^2 * -0.00034]);
-
-end
-
-
-% imshowpair(img, logScaling(curved(:, 1:end/2)), "falsecolor")
-
-img = circshift(img, -80, 1);
-% figure
-imshow(img(500:end-500, :), [])
-

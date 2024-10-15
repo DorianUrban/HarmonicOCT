@@ -5,8 +5,8 @@ directory = strcat(pwd, "\data\Grape\20240408-164353-00");
 % f = Frame(directory, 3);
 % f = f.disp_comp();
 
-f_blurred = get_average_frame(directory, 10, 6, false);
-f_sharp = get_average_frame(directory, 10, 6);
+f_blurred = get_average_frame(directory, 10, 3, false);
+f_sharp = get_average_frame(directory, 10, 3);
 
 h = findall(groot, type="figure");
 
@@ -35,18 +35,20 @@ k_min = 2 * pi / 1110e-9;
 k_max = 2 * pi / 1010e-9;
 
 k_axis = linspace(k_min, k_max, size(stftz, 2)) / 1e6;
-
+%%
 figure
 f = tiledlayout(2, 2, tilespacing="tight", padding="tight");
 
 ax = nexttile;
 pcolor(k_axis, stfty * z_max, flipud(stftz./vecnorm(stftz, "Inf", 1)))
 shading flat
-ylabel("z (mm)", "FontSize", 10)
+ylbl = ylabel("z (mm)", "FontSize", 10);
+ylbl.Position(1) = ylbl.Position(1) + 0.03;
 yticks([0, 1, 2])
 yticklabels({"0", "1", "2"})
 xlabel("Central Wavenumber (rad/\mum)", "FontSize", 10)
 % daspect([1, 5 1])
+clim([0 1])
 
 hold on
 [~, I] = max(max(abs(stftz), [],  1));
@@ -55,15 +57,19 @@ xline(k_axis(I), "r--")
 text(ax, 5.665, 1.85, "a", "FontSize", 12, "Color", [0.99 0.99 0.99])
 
 ax = nexttile;
-pcolor(k_axis, ((xcorry - 0.5) * 4), flipud(xcorrz))
+pcolor(k_axis, ((xcorry - 0.5) * 4), flipud(xcorrz./vecnorm(xcorrz, "Inf", 1)))
+colormap(parula(256))
 shading flat
 hold on
 plot(k_axis, -1 * ((ridgey - 0.5) * 4), "r--")
-ylabel("\Delta z (mm)", "FontSize", 10)
+ylbl = ylabel("\Delta z (mm)", "FontSize", 10);
+ylbl.Position(1) = ylbl.Position(1) + 0.02;
 yticks([-2, 0, 2])
 yticklabels({"-2", "0", "2"})
 % daspect([1, 5, 1])
 xlabel("Central Wavenumber (rad/\mum)", "FontSize", 10)
+% clim([0 1])
+clim
 
 text(ax, 5.665, 1.75, "b", "FontSize", 12, "Color", [0.99 0.99 0.99])
 

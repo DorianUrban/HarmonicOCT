@@ -4,9 +4,9 @@ directory = strcat(pwd, "\data\Grape\20240408-163327-00");
 f_real = get_average_frame(directory, N, 3);
 f_real = f_real(end/2:end, 1:end/2);
 
-directory = strcat(pwd, "\data\Grape\20240408-164353-00");
-f_harmonic = get_average_frame(directory, N, 8);
-f_harmonic = f_harmonic(end/2:end, 1:end/2);
+% directory = strcat(pwd, "\data\Grape\20240408-164353-00");
+% f_harmonic = get_average_frame(directory, N, 8);
+% f_harmonic = f_harmonic(end/2:end, 1:end/2);
 
 directory = strcat(pwd, "\data\Grape\20240408-165438-00");
 f_flat = get_average_frame(directory, N, 8);

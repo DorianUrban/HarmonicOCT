@@ -11,7 +11,7 @@ f = Frame(directory);
 % f = f.select_roi();
 % pos = f.roi;
 
-pos = [108 102 624 138];
+pos = [922 31 198 51];
 noise = f.noise;
 
 names = names(1:end-1);
@@ -49,7 +49,7 @@ for ii = 1:length(names)
         % f.show();
         % title(strcat(f.info.comment, ", SNR = ", num2str(f.snr), " j= ", num2str(jj)))
        
-        sprintf("%i, %i", ii, jj)
+        % sprintf("%i, %i", ii, jj)
         % f.comment
 
     end
@@ -73,12 +73,13 @@ results = sortrows(results, 2);
 results_rearranged = results(idx, :);
 % results_rmv = results(1:end, :);
 
+freqs = cell2mat(results_rearranged(:, 5));
+opd = 1.6e-3 .* freqs - 6.55;
+
 snrs = cell2mat(results_rearranged(:, 3));
 p = polyfit(opd(2:end), snrs(2:end), 1);
 snrs_fit = polyval(p, opd(2:end));
 
-freqs = cell2mat(results_rearranged(:, 5));
-opd = 1.6e-3 * freqs - 6.55;
 
 img_ref = results{1, 7};
 img_ref = img_ref(end/2:end, end/2:end);

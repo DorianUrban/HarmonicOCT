@@ -289,7 +289,7 @@ classdef Frame
 
             % ma = median(max(abs(obj.bscan_real).^2, [], 1));
             % ma = prctile(max(abs(obj.bscan_real).^2, [], 1), 95);
-            ma = prctile(max(abs(obj.bscan_real(1:end/3, :)).^2, [], 1), 95);
+            ma = prctile(max(abs(obj.bscan_real(1:floor(end/3), :)).^2, [], 1), 95);
 
             obj.snr = 10 * log10(ma / s);
 
